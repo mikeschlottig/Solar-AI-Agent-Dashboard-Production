@@ -44,11 +44,22 @@ export default defineConfig(({ mode }) => {
           manualChunks: {
             vendor: ['react', 'react-dom'],
             dashboard: ['recharts', 'd3'],
-            ui: ['@radix-ui/react-dialog', '@radix-ui/react-select'],
-            utils: ['lodash', 'date-fns', 'uuid']
-          }
+            ui: ['@radix-ui/react-dialog', '@radix-ui/react-select', '@radix-ui/react-accordion', '@radix-ui/react-avatar'],
+            utils: ['lodash', 'date-fns', 'uuid'],
+            icons: ['lucide-react', '@radix-ui/react-icons']
+          },
+          chunkFileNames: 'assets/[name]-[hash].js',
+          entryFileNames: 'assets/[name]-[hash].js',
+          assetFileNames: 'assets/[name]-[hash].[ext]'
         }
-      }
+      },
+      minify: isProd ? 'terser' : false,
+      terserOptions: isProd ? {
+        compress: {
+          drop_console: true,
+          drop_debugger: true
+        }
+      } : undefined
     },
     define: {
       global: 'globalThis',
