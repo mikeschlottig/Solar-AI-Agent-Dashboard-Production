@@ -35,7 +35,7 @@ jobs:
     - name: Run frontend tests
       run: |
         cd app
-        pnpm test --run
+        pnpm run test -- --run
     
     - name: Build frontend
       run: |
