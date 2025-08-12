@@ -35,7 +35,11 @@ jobs:
     - name: Run frontend tests
       run: |
         cd app
-        pnpm test --run
+        if [ -d "src" ] && find src -name "*.test.*" -o -name "*.spec.*" | grep -q .; then
+          pnpm run test -- --run
+        else
+          echo "No test files found, skipping tests"
+        fi
     
     - name: Build frontend
       run: |

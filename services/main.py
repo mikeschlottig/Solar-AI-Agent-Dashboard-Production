@@ -28,6 +28,8 @@ class AgentDashboardServer:
     def __init__(self):
         self.active_agents = {}
         self.websocket_connections = set()
+        self.db_pool_size = 10
+        self.max_overflow = 20
         
     async def start_monitoring(self):
         """Start background monitoring tasks"""
@@ -57,10 +59,10 @@ class AgentDashboardServer:
                         )
                         agent_info['last_health'] = health_status
                         
-                await asyncio.sleep(30)  # Check every 30 seconds
+                await asyncio.sleep(60)  # Check every 60 seconds
             except Exception as e:
                 logger.error(f"Error in agent health monitoring: {e}")
-                await asyncio.sleep(5)
+                await asyncio.sleep(10)
                 
     async def check_agent_health(self, agent_id: str) -> str:
         """Check health status of a specific agent"""
@@ -79,10 +81,10 @@ class AgentDashboardServer:
                 }
                 
                 logger.info(f"Performance metrics collected: {metrics}")
-                await asyncio.sleep(60)  # Collect every minute
+                await asyncio.sleep(300)  # Collect every 5 minutes
             except Exception as e:
                 logger.error(f"Error collecting metrics: {e}")
-                await asyncio.sleep(10)
+                await asyncio.sleep(30)
                 
     async def broadcast_real_time_updates(self):
         """Broadcast real-time updates to connected WebSocket clients"""
@@ -106,10 +108,10 @@ class AgentDashboardServer:
                     # Remove disconnected clients
                     self.websocket_connections -= disconnected
                     
-                await asyncio.sleep(5)  # Update every 5 seconds
+                await asyncio.sleep(10)  # Update every 10 seconds
             except Exception as e:
                 logger.error(f"Error broadcasting updates: {e}")
-                await asyncio.sleep(5)
+                await asyncio.sleep(10)
 
 # Global dashboard server instance
 dashboard_server = AgentDashboardServer()
